@@ -1,0 +1,155 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="using:AutoCrack.UI.ViewModels"
+        mc:Ignorable="d" d:DesignWidth="1000" d:DesignHeight="650"
+        x:Class="AutoCrack.UI.Views.MainWindow"
+        x:DataType="vm:MainViewModel"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="Fluxy AutoCrack"
+        Width="1000" Height="650"
+        WindowStartupLocation="CenterScreen"
+        SystemDecorations="None"
+        CanResize="False"
+        Background="Transparent"
+        TransparencyLevelHint="AcrylicBlur">
+
+    <!-- Main Container with Rounded Corners -->
+    <Border Background="{StaticResource FluxyBackground}" CornerRadius="10" ClipToBounds="True">
+        <Grid RowDefinitions="80, *, 30">
+
+            <!-- HEADER -->
+            <Panel Grid.Row="0">
+                <Panel.Background>
+                    <LinearGradientBrush StartPoint="0%,50%" EndPoint="100%,50%">
+                        <GradientStop Offset="0" Color="#1E1E23"/>
+                        <GradientStop Offset="1" Color="#121212"/>
+                    </LinearGradientBrush>
+                </Panel.Background>
+
+                <Grid ColumnDefinitions="Auto, *, Auto, Auto" Margin="20,0">
+                    <!-- Title -->
+                    <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBlock Text="FLUXY" FontSize="26" FontWeight="Black" Foreground="White"/>
+                        <TextBlock Text="REPACKS" FontSize="26" FontWeight="Regular" Foreground="{StaticResource FluxyPrimary}" Margin="8,0,0,0"/>
+                    </StackPanel>
+
+                    <!-- Drag Zone (Invisible) -->
+                    <Panel Grid.Column="1" Background="Transparent" PointerPressed="OnDragWindow" />
+
+                    <!-- User Profile -->
+                    <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center" Spacing="15" Margin="0,0,20,0">
+                        <TextBlock Text="{Binding UserName}" VerticalAlignment="Center" FontWeight="SemiBold" Foreground="#DDD"/>
+                        <Border CornerRadius="25" Width="42" Height="42" ClipToBounds="True" Background="#333">
+                            <Image Source="{Binding UserAvatar}" Stretch="UniformToFill"/>
+                        </Border>
+                    </StackPanel>
+
+                    <!-- Close Button -->
+                    <Button Grid.Column="3" Content="✕" 
+                            Click="OnCloseBtnClick"
+                            Background="Transparent" 
+                            Foreground="#666" 
+                            FontSize="18" 
+                            Cursor="Hand"
+                            VerticalAlignment="Center">
+                        <Button.Styles>
+                            <Style Selector="Button:pointerover /template/ ContentPresenter">
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="Foreground" Value="#FF5555"/>
+                            </Style>
+                        </Button.Styles>
+                    </Button>
+                </Grid>
+            </Panel>
+
+            <!-- MAIN CONTENT -->
+            <Grid Grid.Row="1" ColumnDefinitions="320, *" Margin="30">
+                
+                <!-- Left Column: Game Cover -->
+                <Border Grid.Column="0" Background="{StaticResource FluxySurface}" CornerRadius="12" Padding="15" Margin="0,0,30,0">
+                    <Grid RowDefinitions="*, Auto">
+                        <!-- Cover Image -->
+                        <Border Grid.Row="0" CornerRadius="8" ClipToBounds="True" Background="{StaticResource FluxySurfaceLight}">
+                            <Panel>
+                                <!-- Placeholder Text if no image -->
+                                <TextBlock Text="NO GAME SELECTED" 
+                                           IsVisible="{Binding GameCover, Converter={x:Static ObjectConverters.IsNull}}"
+                                           HorizontalAlignment="Center" VerticalAlignment="Center"
+                                           Foreground="#555" FontWeight="Bold"/>
+                                
+                                <!-- Actual Image -->
+                                <Image Source="{Binding GameCover}" Stretch="Uniform"/>
+                            </Panel>
+                        </Border>
+
+                        <!-- Game Name Preview -->
+                        <TextBlock Grid.Row="1" Text="{Binding GameName}" 
+                                   FontSize="18" FontWeight="Bold" Foreground="White" 
+                                   TextAlignment="Center" TextWrapping="Wrap" Margin="0,20,0,5"/>
+                    </Grid>
+                </Border>
+
+                <!-- Right Column: Controls & Logs -->
+                <Grid Grid.Column="1" RowDefinitions="Auto, Auto, Auto, *, Auto">
+                    
+                    <!-- Path Selection -->
+                    <TextBlock Grid.Row="0" Text="GAME INSTALLATION FOLDER" Foreground="{StaticResource FluxySubText}" FontWeight="Bold" FontSize="11" Margin="0,0,0,8"/>
+                    
+                    <Grid Grid.Row="1" ColumnDefinitions="*, 120" Margin="0,0,0,25">
+                        <TextBox Text="{Binding GamePath}" Watermark="C:\Games\Cyberpunk 2077..." 
+                                 VerticalContentAlignment="Center" Height="45"/>
+                        
+                        <Button Grid.Column="1" Content="BROWSE" Classes="modern"
+                                Command="{Binding BrowseCommand}"
+                                CommandParameter="{Binding $parent[Window].StorageProvider}"
+                                HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Margin="10,0,0,0"/>
+                    </Grid>
+
+                    <!-- Logs Area -->
+                    <TextBlock Grid.Row="2" Text="ACTIVITY LOG" Foreground="{StaticResource FluxySubText}" FontWeight="Bold" FontSize="11" Margin="0,0,0,8"/>
+                    
+                    <Border Grid.Row="3" Background="{StaticResource FluxySurface}" CornerRadius="8" Margin="0,0,0,25">
+                        <ScrollViewer Name="LogScroller">
+                            <ItemsControl ItemsSource="{Binding Logs}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding}" FontFamily="Consolas" FontSize="12" Foreground="#CCC" Margin="10,2"/>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </Border>
+
+                    <!-- Action Button -->
+                    <Button Grid.Row="4" Classes="primary" Content="APPLY CRACK"
+                            Command="{Binding ApplyCrackCommand}"
+                            HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
+                            Height="55" FontSize="16"/>
+                </Grid>
+            </Grid>
+
+            <!-- FOOTER -->
+            <Grid Grid.Row="2" Background="#161616">
+                <!-- Indeterminate Progress Bar (Only visible when busy) -->
+                <ProgressBar VerticalAlignment="Top" Height="2" 
+                             IsIndeterminate="True" 
+                             IsVisible="{Binding IsBusy}"
+                             Foreground="{StaticResource FluxyPrimary}" 
+                             Background="Transparent"/>
+                
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="15,0">
+                    <TextBlock Text="Status: " Foreground="{StaticResource FluxySubText}" FontSize="12"/>
+                    <TextBlock Text="{Binding StatusMessage}" Foreground="White" FontSize="12"/>
+                </StackPanel>
+                
+                <!-- Clock -->
+                <TextBlock Text="{Binding Source={x:Static sys:DateTime.Now}, StringFormat='{}{0:HH:mm}'}" 
+                           xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                           HorizontalAlignment="Right" VerticalAlignment="Center" Margin="15,0"
+                           Foreground="{StaticResource FluxySubText}" FontFamily="Consolas"/>
+            </Grid>
+        </Grid>
+    </Border>
+</Window>

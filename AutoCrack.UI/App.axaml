@@ -1,0 +1,62 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="AutoCrack.UI.App"
+             RequestedThemeVariant="Dark">
+
+    <Application.Resources>
+        <!-- Color Palette -->
+        <SolidColorBrush x:Key="FluxyBackground">#121212</SolidColorBrush>
+        <SolidColorBrush x:Key="FluxySurface">#1E1E23</SolidColorBrush>
+        <SolidColorBrush x:Key="FluxySurfaceLight">#2D2D32</SolidColorBrush>
+        <SolidColorBrush x:Key="FluxyPrimary">#FCAF17</SolidColorBrush>
+        <SolidColorBrush x:Key="FluxyText">#F0F0F0</SolidColorBrush>
+        <SolidColorBrush x:Key="FluxySubText">#888888</SolidColorBrush>
+    </Application.Resources>
+
+    <Application.Styles>
+        <FluentTheme />
+        
+        <!-- Button: Modern (Default Gray) -->
+        <Style Selector="Button.modern">
+            <Setter Property="Background" Value="{StaticResource FluxySurfaceLight}"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="Padding" Value="15,10"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+        </Style>
+        <Style Selector="Button.modern:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="#3D3D42"/>
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+
+        <!-- Button: Primary (Fluxy Yellow) -->
+        <Style Selector="Button.primary">
+            <Setter Property="Background" Value="{StaticResource FluxyPrimary}"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="CornerRadius" Value="8"/>
+        </Style>
+        <Style Selector="Button.primary:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="#FFBF37"/>
+            <Setter Property="Foreground" Value="Black"/>
+        </Style>
+        <Style Selector="Button.primary:disabled /template/ ContentPresenter">
+            <Setter Property="Background" Value="#333"/>
+            <Setter Property="Foreground" Value="#555"/>
+        </Style>
+
+        <!-- TextBox: Custom Rounded -->
+        <Style Selector="TextBox">
+            <Setter Property="Background" Value="{StaticResource FluxySurface}"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="Padding" Value="10"/>
+        </Style>
+        <Style Selector="TextBox:focus /template/ Border#PART_BorderElement">
+            <Setter Property="Background" Value="{StaticResource FluxySurface}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource FluxyPrimary}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+    </Application.Styles>
+</Application>
